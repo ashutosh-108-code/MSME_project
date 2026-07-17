@@ -1,20 +1,31 @@
-﻿import { ShieldCheck } from "lucide-react";
+"use client";
 
-import { ActivityFeed } from "../components/dashboard/ActivityFeed";
-import { ModuleCard } from "../components/dashboard/ModuleCard";
-import { ScoreDisplay } from "../components/dashboard/ScoreDisplay";
-import { CollapsibleSection } from "../components/ui/CollapsibleSection";
-import { PanicButton } from "../components/panic/PanicButton";
-import { mockActivity } from "../lib/mock/mockActivity";
-import { mockModuleAlerts } from "../lib/mock/mockAlerts";
-import { mockSecurityScore } from "../lib/mock/mockScore";
-import { typography } from "../styles/tokens";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { ShieldCheck } from "lucide-react";
+
+import { ActivityFeed } from "../../../components/dashboard/ActivityFeed";
+import { ModuleCard } from "../../../components/dashboard/ModuleCard";
+import { ScoreDisplay } from "../../../components/dashboard/ScoreDisplay";
+import { CollapsibleSection } from "../../../components/ui/CollapsibleSection";
+import { PanicButton } from "../../../components/panic/PanicButton";
+import { mockActivity } from "../../../lib/mock/mockActivity";
+import { mockModuleAlerts } from "../../../lib/mock/mockAlerts";
+import { mockSecurityScore } from "../../../lib/mock/mockScore";
+import { typography } from "../../../styles/tokens";
+import { useAuth } from "../../../lib/AuthContext";
 
 export default function DashboardHome() {
-  const totalAlerts = mockModuleAlerts.reduce(
-    (sum, m) => sum + m.alerts.length,
-    0,
-  );
+  const { isLoggedIn, user } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      router.replace("/");
+    }
+  }, [isLoggedIn, router]);
+
+  const totalAlerts = mockModuleAlerts.reduce((sum, m) => sum + m.alerts.length, 0);
 
   return (
     <main className="mx-auto max-w-5xl px-4 py-6 sm:px-6 lg:px-8">
@@ -24,11 +35,11 @@ export default function DashboardHome() {
           Business security
         </div>
         <h1 className="mt-3 text-2xl font-bold tracking-tight text-[var(--color-neutral-900)] sm:text-3xl">
-          Shree Ganesh Traders
+          {user?.businessName ?? "Shree Ganesh Traders"}
         </h1>
         <p className={`${typography.body} mt-2 max-w-lg`}>
-          A few simple checks need your attention. We keep the language plain
-          and focus only on what matters for your shop, staff, and payments.
+          A few simple checks need your attention. We keep the language plain and
+          focus only on what matters for your shop, staff, and payments.
         </p>
       </div>
 

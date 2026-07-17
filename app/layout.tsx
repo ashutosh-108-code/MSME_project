@@ -1,9 +1,7 @@
 ﻿import type { Metadata } from "next";
 import type { CSSProperties, ReactNode } from "react";
 
-import { PanicProvider } from "../lib/PanicContext";
-import { CaseProgressBar } from "../components/panic/CaseProgressBar";
-import { CaseUpdateNotice } from "../components/panic/CaseUpdateNotice";
+import { AuthProvider } from "../lib/AuthContext";
 import { colors, shadows, typography } from "../styles/tokens";
 
 import "./globals.css";
@@ -47,11 +45,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           fontFamily: typography.fontFamily,
         }}
       >
-        <PanicProvider>
-          <CaseProgressBar />
-          <CaseUpdateNotice />
+        <AuthProvider>
           {children}
-        </PanicProvider>
+        </AuthProvider>
       </body>
     </html>
   );
